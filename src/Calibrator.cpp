@@ -483,6 +483,7 @@ void Calibrator::addCalibrationLines(Image * image)
 
 	// Calculate the originY
 	real originY = 0;
+	unsigned yCount = 2;
 	if (calculateOriginYOnSensor(originY))
 	{
 		// Calculate the originY
