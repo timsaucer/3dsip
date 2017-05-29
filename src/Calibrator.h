@@ -63,7 +63,6 @@ public:
 	static bool detectLaserX(/* out */ real * laserX , PixelLocation& topLocation, PixelLocation& bottomLocation, Laser * laser, Laser::LaserSide side);
 	static bool intersectPlane(const Ray& ray, const Plane& plane, Vector3 * intersection);
 
-	static bool computeRotatingLaserLocation(double[] thetas, double calibrationWidth, double &x, double &z, double &theta0);
 };
 
 }

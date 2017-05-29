@@ -584,16 +584,4 @@ bool Calibrator::intersectPlane(const Ray& inRay, const Plane& plane, Vector3 * 
 	return true;
 }
 
-bool Calibrator::computeRotatingLaserLocation(double[] thetas, double calibrationWidth, double &x, double &z, double &theta0)
-{
-	double A = tan(thetas[1] - thetas[0]);
-	double B = tan(thetas[2] - thetas[0]);
-
-	double C = -2.*A + 2.*B;
-	double D = 4.;
-	double E = 2.*B - 2.*A;
-
-	return true;
-}
-
 }
