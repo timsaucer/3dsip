@@ -436,22 +436,24 @@ void Calibrator::addCalibrationLines(Image * image)
 	unsigned maxCount = 1;
 	for (unsigned iBarNum = 1; iBarNum < 4; iBarNum++)
 	{
-		bool bShowThisBar = (preset.scanMode == SCAN_IN_PLACE && iBarNum == 1) ||
-				            (preset.scanMode == TURN_TABLE && iBarNum == 2) ||
-							(preset.scanMode == SCAN_IN_PLACE && iBarNum == 3);
-		for (unsigned iRow = 0; iRow < height; iRow++)
+		if( (preset.scanMode == SCAN_IN_PLACE && iBarNum == 1) ||
+				(preset.scanMode == TURN_TABLE && iBarNum == 2) ||
+				(preset.scanMode == SCAN_IN_PLACE && iBarNum == 3))
 		{
-			for (unsigned cnt = minCount; cnt <= maxCount; cnt++)
+			for (unsigned iRow = 0; iRow < height; iRow++)
 			{
-				if ((iRow + cnt) % 2)
+				for (unsigned cnt = minCount; cnt <= maxCount; cnt++)
 				{
-					pixels[(iBarNum*xCol + cnt) * components] = 255;
-					pixels[(iBarNum*xCol + cnt) * components + 1] = 0;
-					pixels[(iBarNum*xCol + cnt) * components + 2] = 0;
+					if ((iRow + cnt) % 2)
+					{
+						pixels[(iBarNum*xCol + cnt) * components] = 255;
+						pixels[(iBarNum*xCol + cnt) * components + 1] = 0;
+						pixels[(iBarNum*xCol + cnt) * components + 2] = 0;
+					}
 				}
-			}
 
-			pixels += rowStride;
+				pixels += rowStride;
+			}
 		}
 	}
 
@@ -459,19 +461,21 @@ void Calibrator::addCalibrationLines(Image * image)
 	unsigned yCol = (height / 2) - 1;
 	for (unsigned iBarNum = 1; iBarNum < 4; iBarNum++)
 	{
-		bool bShowThisBar = (preset.scanMode == SCAN_IN_PLACE && iBarNum == 1) ||
+		if ( (preset.scanMode == SCAN_IN_PLACE && iBarNum == 1) ||
 				(preset.scanMode == TURN_TABLE && iBarNum == 2) ||
-				(preset.scanMode == SCAN_IN_PLACE && iBarNum == 3);
-		for (unsigned cnt = minCount; cnt <= maxCount; cnt++)
+				(preset.scanMode == SCAN_IN_PLACE && iBarNum == 3))
 		{
-			pixels = image->getPixels() + (rowStride * (yCol + cnt));
-			for (unsigned iCol = 0; iCol < width; iCol++)
+			for (unsigned cnt = minCount; cnt <= maxCount; cnt++)
 			{
-				if ((iCol + cnt) % 2)
+				pixels = image->getPixels() + (rowStride * (yCol + cnt));
+				for (unsigned iCol = 0; iCol < width; iCol++)
 				{
-					pixels[iBarNum*iCol * components] = 255;
-					pixels[iBarNum*iCol * components + 1] = 0;
-					pixels[iBarNum*iCol * components + 2] = 0;
+					if ((iCol + cnt) % 2)
+					{
+						pixels[iBarNum*iCol * components] = 255;
+						pixels[iBarNum*iCol * components + 1] = 0;
+						pixels[iBarNum*iCol * components + 2] = 0;
+					}
 				}
 			}
 		}
