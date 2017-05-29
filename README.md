@@ -1,3 +1,10 @@
+#3Dsip
+
+This is a laser scanner to scan in place an object from one side. It is based on FreeLSS by hairu. The electronics are similar, but require additional GPIO pins on the raspberry pi for microstepping control.
+
+I strongly recommend instead looking at freelss as this is very much a work in progress.
+https://github.com/hairu/freelss
+
 #FreeLSS
 
 FreeLSS is a laser scanning program for the Raspberry Pi. It allows a Raspberry Pi to function as the core to a complete turn table laser scanning system.
