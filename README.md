@@ -2,6 +2,9 @@
 
 This is a laser scanner to scan in place an object from one side. It is based on FreeLSS by hairu. The electronics are similar, but require additional GPIO pins on the raspberry pi for microstepping control.
 
+Hardware schematic:
+https://timsaucer.wordpress.com/2016/10/08/freelss-up-an-running-almost/
+
 I strongly recommend instead looking at freelss as this is very much a work in progress.
 https://github.com/hairu/freelss
 
