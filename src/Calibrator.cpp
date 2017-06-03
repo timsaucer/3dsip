@@ -432,19 +432,20 @@ void Calibrator::addCalibrationLines(Image * image)
 
 	// Add center vertical bar
 	unsigned xCol = (width / 4) - 1;
-	unsigned minCount = -1;
-	unsigned maxCount = 1;
+	int minCount = -1;
+	int maxCount = 1;
 	for (unsigned iBarNum = 1; iBarNum < 4; iBarNum++)
 	{
+		pixels = image->getPixels();
 		if( (preset.scanMode == SCAN_IN_PLACE && iBarNum == 1) ||
-				(preset.scanMode == TURN_TABLE && iBarNum == 2) ||
+				(iBarNum == 2) ||
 				(preset.scanMode == SCAN_IN_PLACE && iBarNum == 3))
 		{
-			for (unsigned iRow = 0; iRow < height; iRow++)
+			for (unsigned iRow = 1; iRow < height; iRow++)
 			{
-				for (unsigned cnt = minCount; cnt <= maxCount; cnt++)
+				for (int cnt = minCount; cnt <= maxCount; cnt++)
 				{
-					if ((iRow + cnt) % 2)
+					if ((iRow + cnt) % 3)
 					{
 						pixels[(iBarNum*xCol + cnt) * components] = 255;
 						pixels[(iBarNum*xCol + cnt) * components + 1] = 0;
@@ -458,23 +459,23 @@ void Calibrator::addCalibrationLines(Image * image)
 	}
 
 	// Add center horizontal image
-	unsigned yCol = (height / 2) - 1;
+	unsigned yCol = (height / 4) - 1;
 	for (unsigned iBarNum = 1; iBarNum < 4; iBarNum++)
 	{
 		if ( (preset.scanMode == SCAN_IN_PLACE && iBarNum == 1) ||
-				(preset.scanMode == TURN_TABLE && iBarNum == 2) ||
+				(iBarNum == 2) ||
 				(preset.scanMode == SCAN_IN_PLACE && iBarNum == 3))
 		{
-			for (unsigned cnt = minCount; cnt <= maxCount; cnt++)
+			for (int cnt = minCount; cnt <= maxCount; cnt++)
 			{
-				pixels = image->getPixels() + (rowStride * (yCol + cnt));
+				pixels = image->getPixels() + (rowStride * (iBarNum*yCol + cnt));
 				for (unsigned iCol = 0; iCol < width; iCol++)
 				{
 					if ((iCol + cnt) % 2)
 					{
-						pixels[iBarNum*iCol * components] = 255;
-						pixels[iBarNum*iCol * components + 1] = 0;
-						pixels[iBarNum*iCol * components + 2] = 0;
+						pixels[iCol * components] = 255;
+						pixels[iCol * components + 1] = 0;
+						pixels[iCol * components + 2] = 0;
 					}
 				}
 			}

@@ -1162,6 +1162,8 @@ static int ProcessPageRequest(RequestInfo * reqInfo)
                     real32 radians = DEGREES_TO_RADIANS(degrees);
 					MotorDriver * motor = MotorDriver::getInstance();
 					motor->setMotorEnabled(true);
+					if (PresetManager::get()->getActivePreset().scanMode == SCAN_IN_PLACE)
+						motor->moveToHomePosition();
 					int numSteps = motor->rotate(radians);
 					std::cout << "Took " << numSteps << " steps." << std::endl;
 				}

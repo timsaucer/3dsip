@@ -22,6 +22,7 @@
 #include "MmalStillCamera.h"
 #include "MmalImageStore.h"
 #include "Thread.h"
+#include "PresetManager.h"
 
 #define MMAL_CAMERA_PREVIEW_PORT 0
 #define MMAL_CAMERA_VIDEO_PORT 1
@@ -319,6 +320,8 @@ void MmalStillCamera::createPreview()
 
 void MmalStillCamera::createCameraComponent()
 {
+	Preset preset = PresetManager::get()->getActivePreset();
+
 	MMAL_COMPONENT_T *camera = 0;
 	MMAL_ES_FORMAT_T *format;
 	MMAL_PORT_T *preview_port = NULL, *video_port = NULL, *still_port = NULL;
@@ -433,7 +436,10 @@ void MmalStillCamera::createCameraComponent()
 
 		// Flip the image
 		MMAL_PARAMETER_MIRROR_T mirror = {{MMAL_PARAMETER_MIRROR, sizeof(MMAL_PARAMETER_MIRROR_T)}, MMAL_PARAM_MIRROR_NONE};
-		mirror.value = MMAL_PARAM_MIRROR_BOTH;
+		if (preset.scanMode == SCAN_IN_PLACE)
+			mirror.value = MMAL_PARAM_MIRROR_NONE;
+		else
+			mirror.value = MMAL_PARAM_MIRROR_BOTH;
 		mmal_port_parameter_set(preview_port, &mirror.hdr);
 		mmal_port_parameter_set(video_port, &mirror.hdr);
 		mmal_port_parameter_set(still_port, &mirror.hdr);
