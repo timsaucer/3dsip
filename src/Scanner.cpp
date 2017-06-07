@@ -383,7 +383,7 @@ void Scanner::runScan()
 			throw Exception("Motor object is NULL");
 		}
 
-		float rotation = 0;
+		float rotation = 0.8378; // 48 degrees in radians
 
 		// Read the number of motor steps per revolution
 		int stepsPerRevolution = setup->stepsPerRevolution * pow(2,setup->motorMicrostepFactor);
@@ -422,7 +422,7 @@ void Scanner::runScan()
                 time1 = GetTimeInSeconds();
                 image1 = acquireImage();
 
-                m_laser->turnOn(Laser::RIGHT_LASER);
+                m_laser->turnOn(Laser::LEFT_LASER);
                 delayAcquisitionForLaser();
             
             }
@@ -445,7 +445,7 @@ void Scanner::runScan()
 			}
 
             if (preset.scanMode == SCAN_IN_PLACE)
-                singleScanInPlace (iFrame, rotation, frameRadians, rightLocMapper, &timingStats, image1);
+                singleScanInPlace (iFrame, rotation, frameRadians, leftLocMapper, &timingStats, image1);
             else
                 singleScanTurnTable(iFrame, rotation, frameRadians, leftLocMapper, rightLocMapper, &timingStats);
 
@@ -471,7 +471,7 @@ void Scanner::runScan()
         if (preset.scanMode == SCAN_IN_PLACE)
         {
             releaseImage(image1);
-            m_laser->turnOff(Laser::RIGHT_LASER);
+            m_laser->turnOff(Laser::LEFT_LASER);
             delayAcquisitionForLaser();
         }
 	}
@@ -1041,7 +1041,7 @@ void Scanner::singleScanTurnTable(int frame, float rotation, float frameRotation
 	}
 }
  
-void Scanner::singleScanInPlace(int frame, float rotation, float frameRotation, LocationMapper& rightLocMapper, TimingStats * timingStats, Image * image1)
+void Scanner::singleScanInPlace(int frame, float rotation, float frameRotation, LocationMapper& leftLocMapper, TimingStats * timingStats, Image * image1)
     {
         double time1 = GetTimeInSeconds();
         m_turnTable->rotate(frameRotation);
@@ -1065,20 +1065,20 @@ void Scanner::singleScanInPlace(int frame, float rotation, float frameRotation, 
                 imageWriter.writeImage(* image1, 128, 96, thumbnail.c_str());
             }
             
-                // Turn on the right laser
+                // Turn on the left laser
                 time1 = GetTimeInSeconds();
                 timingStats->laserTime += GetTimeInSeconds() - time1;
                 
-                // Take a picture with the right laser on
+                // Take a picture with the left laser on
                 time1 = GetTimeInSeconds();
                 image2 = acquireImage();
                 timingStats->imageAcquisitionTime += GetTimeInSeconds() - time1;
             
-                Vector3 vecUpdatedLaserNorm (sin(rotation), 0.0, -cos(rotation));
-                rightLocMapper.setLaserPlaneNormal(vecUpdatedLaserNorm);
+                Vector3 vecUpdatedLaserNorm (sin(rotation), 0.0, cos(rotation));
+                leftLocMapper.setLaserPlaneNormal(vecUpdatedLaserNorm);
                 
-                // Process the right laser results
-                processScan(image1, image2, m_rightLaserResults, frame, 0.0, rightLocMapper, Laser::RIGHT_LASER, m_firstRowRightLaserCol, timingStats);
+                // Process the left laser results
+                processScan(image1, image2, m_leftLaserResults, frame, 0.0, leftLocMapper, Laser::LEFT_LASER, m_firstRowLeftLaserCol, timingStats);
                 
                 releaseImage(image2);
             

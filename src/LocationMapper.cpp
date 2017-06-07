@@ -87,7 +87,8 @@ void LocationMapper::mapPoints(PixelLocation * laserLocations,
 			// The point must be above the turn table and less than the max distance from the center of the turn table
 			real distXZSq = point->x * point->x + point->z * point->z;
 
-			if (point->y >= m_groundPlaneHeight && distXZSq < maxXZDistFromOriginSq && point->y < m_maxObjectSize)
+			if ((point->y >= m_groundPlaneHeight && distXZSq < maxXZDistFromOriginSq && point->y < m_maxObjectSize) ||
+				(PresetManager::get()->getActivePreset().scanMode == SCAN_IN_PLACE))
 			{
 				// Set the color
 				if (haveImage)
